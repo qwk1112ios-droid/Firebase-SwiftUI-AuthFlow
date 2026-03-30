@@ -6,12 +6,20 @@
 //
 
 import SwiftUI
+import Firebase
 
 @main
 struct Firebase_SwiftUI_AuthFlowApp: App {
+    @State var authManager: AuthenticationManager
+    init () {
+        FirebaseApp.configure()
+        _authManager = State(initialValue: AuthenticationManager())
+    }
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
+                .environment(authManager)
+            
         }
     }
 }
