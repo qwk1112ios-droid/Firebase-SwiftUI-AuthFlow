@@ -1,0 +1,32 @@
+# =========================
+# Xcode
+# =========================
+DerivedData/
+build/
+*.xcworkspace
+!default.xcworkspace
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+
+# =========================
+# Swift Package Manager
+# =========================
+.build/
+Packages/
+
+# =========================
+# Firebase / Secrets
+# =========================
+GoogleService-Info.plist
+
+# =========================
+# macOS
+# =========================
+.DS_Store
+
+# =========================
+# Logs / Temp
+# =========================
+*.log
+*.tmp
