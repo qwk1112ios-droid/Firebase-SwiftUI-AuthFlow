@@ -8,11 +8,18 @@
 import SwiftUI
 
 struct RootView: View {
+    @Environment(AuthenticationManager.self) var authManager
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        if authManager.authState == .signedOut {
+           AuthView()
+        }
+        else {
+            InfoSetting()
+        }
     }
 }
 
 #Preview {
     RootView()
+        .environment(AuthenticationManager())
 }

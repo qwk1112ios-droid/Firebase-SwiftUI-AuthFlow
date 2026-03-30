@@ -1,0 +1,54 @@
+//
+//  AuthenticationManager.swift
+//  Firebase-SwiftUI-AuthFlow
+//
+//  Created by Amel Sbaihi on 3/29/26.
+//
+
+import FirebaseAuth
+import Foundation
+
+enum AuthState {
+    case authenticated  /// Anonymously SignedIn
+    case signedIn       /// email&password or with provider
+    case signedOut      /// not signedIn or authenticated
+}
+
+@MainActor
+@Observable class AuthenticationManager {
+    var authState: AuthState = .signedOut
+    var user: User?
+    var handleListener: AuthStateDidChangeListenerHandle!
+
+    init() {
+        ConfigurationAuthStateChange()
+    }
+
+}
+
+extension AuthenticationManager {
+    // MARK: - Authentication State Listener
+    /// Observes Firebase authentication state changes and updates the app session accordingly.
+    func ConfigurationAuthStateChange() {
+        handleListener = Auth.auth().addStateDidChangeListener { auth, user in
+            print(
+                "user \(user, default: "user is nil") status have been updated."
+            )
+            self.updateState(for: user)
+        }
+    }
+    /// Updates the authentication state based on the current Firebase user.
+    ///
+    /// - Parameter user: The current Firebase user, or nil if the user is signed out.
+    func updateState(for user: User?) {
+        self.user = user
+        let isUserAuthenticated = user != nil
+        let isAnonymous = user?.isAnonymous ?? false
+        if isUserAuthenticated {
+            self.authState = isAnonymous ? .authenticated : .signedIn
+        } else {
+            self.authState = .signedOut
+
+        }
+    }
+}
