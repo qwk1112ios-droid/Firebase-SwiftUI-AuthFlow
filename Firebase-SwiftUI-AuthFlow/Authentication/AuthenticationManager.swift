@@ -68,3 +68,23 @@ extension AuthenticationManager {
         return result
     }
 }
+
+extension AuthenticationManager {
+
+    // MARK: - SignOut
+    
+    /// SignOut Function
+    func signOut() throws {
+        if Auth.auth().currentUser != nil {
+            do {
+                // TODO: Sign out from signed-in Provider.
+                try Auth.auth().signOut()
+            } catch let error as NSError {
+                print(
+                    "FirebaseAuthError: failed to sign out from Firebase, \(error)"
+                )
+                throw error
+            }
+        }
+    }
+}

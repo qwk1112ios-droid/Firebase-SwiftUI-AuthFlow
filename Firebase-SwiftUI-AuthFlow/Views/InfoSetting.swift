@@ -50,7 +50,7 @@ struct InfoSetting: View {
                     }
                     
                     if authManager.authState == .signedIn {
-                      // give user option to signOut.
+                     
                         VStack{
                             
                             Text(authManager.user?.displayName ?? "Name placeholder")
@@ -60,7 +60,7 @@ struct InfoSetting: View {
                             //
                             
                             Button {
-                               // handleSignOut()
+                                handleSignOut()
                                
                             } label: {
                                 HStack(spacing: 4) {
@@ -85,7 +85,19 @@ struct InfoSetting: View {
             }
         }
     }
+    
+    //MARK: -SignOut
+    func handleSignOut() {
+        do {
+            try authManager.signOut()
+
+        } catch {
+            print("error")
+        }
+    }
 }
+
+
 
 #Preview {
     InfoSetting()
