@@ -5,22 +5,26 @@
 //  Created by Amel Sbaihi on 3/30/26.
 //
 
+import FirebaseAuth
 import SwiftUI
 
 struct AuthView: View {
     @Environment(AuthenticationManager.self) var authManager
     var body: some View {
         NavigationStack {
-            ZStack{
+            ZStack {
                 FluidModernBackground()
-                VStack{
-                    // AddImage
-                    
-                    //Skip button
-                    
+                VStack {
+                    // TODO: - Add Image
+
+                    // MARK: - Skip Button
+
+                    /// Allows the user to continue as a guest by signing in anonymously via Firebase.
                     if authManager.authState == .signedOut {
                         Button {
-                            authManager.authState = .authenticated
+                            Task {
+                                await handleSignInAnonymously()
+                            }
                         } label: {
                             Text("Skip")
                                 .font(.body.bold())
@@ -40,7 +44,20 @@ struct AuthView: View {
     }
 }
 
+extension AuthView {
+    //MARK: -SignIn Anonymously
+    // SignInAnonymously funciton
+    func handleSignInAnonymously() async {
+        do {
+            let result = try await authManager.signInAnonymously()
+            print("SignInAnonymouslySuccess: \(result.user.uid)")
+        } catch {
+            print("SignInAnonymouslyError: \(error.localizedDescription)")
+        }
+    }
+}
+
 #Preview {
     AuthView()
-        .environment (AuthenticationManager())
+        .environment(AuthenticationManager())
 }

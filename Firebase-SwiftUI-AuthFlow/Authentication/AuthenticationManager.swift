@@ -28,6 +28,7 @@ enum AuthState {
 
 extension AuthenticationManager {
     // MARK: - Authentication State Listener
+    
     /// Observes Firebase authentication state changes and updates the app session accordingly.
     func ConfigurationAuthStateChange() {
         handleListener = Auth.auth().addStateDidChangeListener { auth, user in
@@ -50,5 +51,20 @@ extension AuthenticationManager {
             self.authState = .signedOut
 
         }
+    }
+}
+
+extension AuthenticationManager {
+
+    // MARK: - Anonymous Authentication
+
+    /// Initiates anonymous authentication with Firebase and
+    /// returns the authenticated user result.
+    func signInAnonymously() async throws -> AuthDataResult {
+        let result = try await Auth.auth().signInAnonymously()
+        print(
+            "FirebaseAuthSuccess: Sign in anonymously, UID: \(result.user.uid)"
+        )
+        return result
     }
 }
