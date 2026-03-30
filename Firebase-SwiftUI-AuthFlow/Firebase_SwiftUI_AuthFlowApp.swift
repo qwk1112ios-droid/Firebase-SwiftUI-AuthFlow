@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct Firebase_SwiftUI_AuthFlowApp: App {
+    init () {
+        // FirebaseApp.configure()
+    }
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
         }
     }
 }
