@@ -7,9 +7,17 @@
 
 import FirebaseAuth
 import SwiftUI
+import GoogleSignInSwift
 
 struct AuthView: View {
     @Environment(AuthenticationManager.self) var authManager
+    @Environment(\.dismiss) var dismiss
+    
+    let googleVM = GoogleSignInButtonViewModel(
+        scheme: .light,   // or .dark
+        style: .wide      // .standard, .icon
+    )
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -17,6 +25,18 @@ struct AuthView: View {
                 VStack {
                     // TODO: - Add Image
 
+                    // MARK: - Google Button
+                    GoogleSignInButton(viewModel: googleVM) {
+                        Task{
+                            //await signInWithGoogle()
+                            
+                            dismiss()
+                        }
+                    }
+                    .frame(width: 260, height: 45)
+                    .cornerRadius(1)
+                    
+                    
                     // MARK: - Skip Button
 
                     /// Allows the user to continue as a guest by signing in anonymously via Firebase.
