@@ -97,11 +97,9 @@ extension AuthenticationManager {
     /// gets google provider user
     ///
     /// - parameter user: google provider user
-    func googleAuth(_ user : GIDGoogleUser) async throws{
+    func googleAuth(_ user : GIDGoogleUser) async throws -> AuthDataResult?{
        guard let idToken = user.idToken?.tokenString  else {
-           // return nil
-           print("err")
-           return
+            return nil
         }
         // create credential from token
         let credential = GoogleAuthProvider.credential(
@@ -110,7 +108,58 @@ extension AuthenticationManager {
           
         )
 
-        // authenticate user
+        do {
+            return try await authenticateUser(credential: credential)
+        } catch {
+            print("FirebaseAuthError: googleAuth(user:) failed. \(error)")
+            throw error
+        }
+
+
+    }
+}
+
+extension AuthenticationManager {
+
+    // MARK: - Credential Auth
+    /// Authenticate User
+    func authenticateUser(credential: AuthCredential) async throws
+        -> AuthDataResult
+    {
+        if Auth.auth().currentUser != nil {
+            return try await authLink(with: credential)!
+        } else {
+            return try await authSignIn(with: credential)
+        }
+    }
+    /// if anonymously signed in then link to provider account
+    func authLink(with credentials: AuthCredential) async throws
+        -> AuthDataResult?
+    {
+        do {
+            guard let user = Auth.auth().currentUser else { return nil }
+            let result = try await user.link(with: credentials)
+            // await updateDisplayName(for: result.user)
+            updateState(for: result.user)
+            return result
+        } catch {
+            print("FirebaseAuthError: signIn(with:) failed. \(error)")
+            throw error
+        }
+    }
+    /// else just signe In provider User to firebase
+    func authSignIn(with credentials: AuthCredential) async throws
+        -> AuthDataResult
+    {
+
+        do {
+            let result = try await Auth.auth().signIn(with: credentials)
+             updateState(for: result.user)
+            return result
+        } catch {
+            print("FirebaseAuthError: signIn(with:) failed. \(error)")
+            throw error
+        }
 
     }
 }
