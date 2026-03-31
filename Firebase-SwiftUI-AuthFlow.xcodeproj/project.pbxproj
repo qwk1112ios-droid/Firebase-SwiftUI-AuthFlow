@@ -37,9 +37,22 @@
 		717DB52E2F7A154D0006F1A8 /* Firebase-SwiftUI-AuthFlowUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Firebase-SwiftUI-AuthFlowUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		7190F10C2F7B8E5C00279FEF /* Exceptions for "Firebase-SwiftUI-AuthFlow" folder in "Firebase-SwiftUI-AuthFlow" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 717DB5162F7A154B0006F1A8 /* Firebase-SwiftUI-AuthFlow */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		717DB5192F7A154B0006F1A8 /* Firebase-SwiftUI-AuthFlow */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7190F10C2F7B8E5C00279FEF /* Exceptions for "Firebase-SwiftUI-AuthFlow" folder in "Firebase-SwiftUI-AuthFlow" target */,
+			);
 			path = "Firebase-SwiftUI-AuthFlow";
 			sourceTree = "<group>";
 		};
@@ -430,6 +443,7 @@
 				DEVELOPMENT_TEAM = 3QUDF9CRJ4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Firebase-SwiftUI-AuthFlow/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -462,6 +476,7 @@
 				DEVELOPMENT_TEAM = 3QUDF9CRJ4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Firebase-SwiftUI-AuthFlow/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

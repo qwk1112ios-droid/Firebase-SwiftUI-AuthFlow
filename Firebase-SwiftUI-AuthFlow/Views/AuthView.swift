@@ -28,7 +28,7 @@ struct AuthView: View {
                     // MARK: - Google Button
                     GoogleSignInButton(viewModel: googleVM) {
                         Task{
-                            //await signInWithGoogle()
+                            await signInWithGoogle()
                             
                             dismiss()
                         }
@@ -76,6 +76,27 @@ extension AuthView {
         }
     }
 }
+
+extension AuthView {
+    // MARK: - Sign In with Google
+    
+    func signInWithGoogle() async {
+        do {
+            guard let user = try await  GoogleHelper.shared.signInWithGoogle() else {
+                return
+            }
+            let result = try await authManager.googleAuth(user)
+     
+            
+            print ("Google Sign In Success \(String(describing: result?.user.uid))")
+        }
+        catch {
+            print("GoogleSignInError: failed to sign in with Google, \(error))")
+                    // Here you can show error message to user.
+        }
+    }
+}
+
 
 #Preview {
     AuthView()
