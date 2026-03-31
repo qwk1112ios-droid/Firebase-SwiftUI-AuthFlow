@@ -25,8 +25,7 @@ struct InfoSetting: View {
                         
                         
                         Button {
-                            // signIn
-                            
+                            // signIn with provider  
                             
                         } label: {
                             HStack(spacing: 4) {

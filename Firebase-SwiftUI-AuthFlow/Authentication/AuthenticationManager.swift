@@ -7,6 +7,7 @@
 
 import FirebaseAuth
 import Foundation
+import GoogleSignIn
 
 enum AuthState {
     case authenticated  /// Anonymously SignedIn
@@ -86,5 +87,30 @@ extension AuthenticationManager {
                 throw error
             }
         }
+    }
+}
+
+extension AuthenticationManager {
+    
+    //MARK: Authenticate with Google provider
+    
+    /// gets google provider user
+    ///
+    /// - parameter user: google provider user
+    func googleAuth(_ user : GIDGoogleUser) async throws{
+       guard let idToken = user.idToken?.tokenString  else {
+           // return nil
+           print("err")
+           return
+        }
+        // create credential from token
+        let credential = GoogleAuthProvider.credential(
+            withIDToken: idToken,
+            accessToken: user.accessToken.tokenString
+          
+        )
+
+        // authenticate user
+
     }
 }
