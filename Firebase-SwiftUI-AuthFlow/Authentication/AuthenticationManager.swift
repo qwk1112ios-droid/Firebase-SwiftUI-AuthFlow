@@ -53,7 +53,29 @@ extension AuthenticationManager {
 
         }
     }
+    
+    func updateDisplayName(for user: User) async {
+        if let currentDisplayName = Auth.auth().currentUser?.displayName,
+            !currentDisplayName.isEmpty
+        {
+            // don't do any thing
+        } else {
+            let providerName = user.providerData.first?.displayName
+            let changeRequest = user.createProfileChangeRequest()
+            changeRequest.displayName = providerName
+            do {
+                try await changeRequest.commitChanges()
+            } catch {
+                print(
+                    "FirebaseAuthError: Failed to update the user's displayName. \(error.localizedDescription)"
+                )
+            }
+
+        }
+    }
 }
+
+
 
 extension AuthenticationManager {
 
@@ -139,7 +161,7 @@ extension AuthenticationManager {
         do {
             guard let user = Auth.auth().currentUser else { return nil }
             let result = try await user.link(with: credentials)
-            // await updateDisplayName(for: result.user)
+             await updateDisplayName(for: result.user)
             updateState(for: result.user)
             return result
         } catch {

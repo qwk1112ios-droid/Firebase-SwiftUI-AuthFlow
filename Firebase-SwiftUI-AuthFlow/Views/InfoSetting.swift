@@ -10,6 +10,8 @@ import FirebaseAuth
 
 struct InfoSetting: View {
     @Environment(AuthenticationManager.self) var authManager
+    @State var showAuthView: Bool = false
+    
     var body: some View {
         NavigationStack {
             ZStack{
@@ -25,7 +27,7 @@ struct InfoSetting: View {
                         
                         
                         Button {
-                            // signIn with provider  
+                           showAuthView = true
                             
                         } label: {
                             HStack(spacing: 4) {
@@ -81,6 +83,8 @@ struct InfoSetting: View {
                         }
                     }
                 }
+            }.sheet(isPresented: $showAuthView) {
+                AuthView()
             }
         }
     }

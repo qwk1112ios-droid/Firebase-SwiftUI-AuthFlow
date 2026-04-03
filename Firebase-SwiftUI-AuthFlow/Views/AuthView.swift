@@ -29,7 +29,6 @@ struct AuthView: View {
                     GoogleSignInButton(viewModel: googleVM) {
                         Task{
                             await signInWithGoogle()
-                            
                             dismiss()
                         }
                     }
