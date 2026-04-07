@@ -17,6 +17,30 @@ struct InfoSetting: View {
             ZStack{
                 FluidModernBackground()
                 VStack{
+                    Image("unlockScreen")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 160, height: 160)
+                        .foregroundStyle(
+                            LinearGradient(
+                                        colors: [
+                                            Color.blue.opacity(0.7),
+                                            Color.purple.opacity(0.6)
+                                        ],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                        )
+                        .padding()
+                        .background(
+                                RoundedRectangle(cornerRadius: 28, style: .continuous)
+                                    .fill(.ultraThinMaterial)
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 28, style: .continuous)
+                                    .stroke(.white.opacity(0.5), lineWidth: 1)
+                            )
+                            .shadow(color: .black.opacity(0.15), radius: 20, x: 0, y: 10)
                     if authManager.authState == .authenticated {
                        // Link user signIn
                         Text(
@@ -48,6 +72,30 @@ struct InfoSetting: View {
                                     )
                             )
                         }
+                        
+                        Button {
+                          handleSignOut()
+                            
+                        } label: {
+                            HStack(spacing: 4) {
+                                Text("SignOut")
+                                    .font(.body.bold())
+                                
+                                
+                            }
+                            .foregroundStyle(Color.white)
+                            .frame(width: 260, height: 45)
+                            .background(Color.appButton)
+                            .cornerRadius(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(
+                                        Color.white.opacity(0.25),
+                                        lineWidth: 1
+                                    )
+                            )
+                        }
+
                     }
                     
                     if authManager.authState == .signedIn {

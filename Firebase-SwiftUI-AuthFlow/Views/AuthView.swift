@@ -24,6 +24,31 @@ struct AuthView: View {
                 FluidModernBackground()
                 VStack {
                     // TODO: - Add Image
+                    Image("lockScreen")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 160, height: 200)
+                        .foregroundStyle(
+                            LinearGradient(
+                                        colors: [
+                                            Color.blue.opacity(0.7),
+                                            Color.purple.opacity(0.6)
+                                        ],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                        )
+                        .padding()
+                        .background(
+                                RoundedRectangle(cornerRadius: 35, style: .continuous)
+                                    .fill(.ultraThinMaterial)
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 35, style: .continuous)
+                                    .stroke(.white.opacity(0.5), lineWidth: 1)
+                            )
+                            .shadow(color: .black.opacity(0.15), radius: 20, x: 0, y: 10)
+                            .padding()
 
                     // MARK: - Google Button
                     GoogleSignInButton(viewModel: googleVM) {
