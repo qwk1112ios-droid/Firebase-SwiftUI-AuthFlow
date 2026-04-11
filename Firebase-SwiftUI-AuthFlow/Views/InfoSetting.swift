@@ -17,19 +17,12 @@ struct InfoSetting: View {
             ZStack{
                 FluidModernBackground()
                 VStack{
-                    Image("unlockScreen")
+                    Image("security")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 160, height: 160)
+                        .frame(width: 280, height: 260)
                         .foregroundStyle(
-                            LinearGradient(
-                                        colors: [
-                                            Color.blue.opacity(0.7),
-                                            Color.purple.opacity(0.6)
-                                        ],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
+                            Color.black.opacity(0.65)
                         )
                         .padding()
                         .background(
