@@ -8,6 +8,7 @@
 import FirebaseAuth
 import SwiftUI
 import GoogleSignInSwift
+import AuthenticationServices
 
 struct AuthView: View {
     @Environment(AuthenticationManager.self) var authManager
@@ -23,20 +24,13 @@ struct AuthView: View {
             ZStack {
                 FluidModernBackground()
                 VStack {
-                    // TODO: - Add Image
-                    Image("lockScreen")
+                   
+                    Image("lock1")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 160, height: 200)
+                        .frame(width: 280, height: 260)
                         .foregroundStyle(
-                            LinearGradient(
-                                        colors: [
-                                            Color.blue.opacity(0.7),
-                                            Color.purple.opacity(0.6)
-                                        ],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
+                            Color.black.opacity(0.65)
                         )
                         .padding()
                         .background(
@@ -49,18 +43,64 @@ struct AuthView: View {
                             )
                             .shadow(color: .black.opacity(0.15), radius: 20, x: 0, y: 10)
                             .padding()
-
+                    Spacer()
+                    
+                    Rectangle()
+                        .frame(width : 300, height: 3
+                        
+                        )
+                        .foregroundColor(Color.black.opacity(0.3))
+                    
                     // MARK: - Google Button
+                    Spacer()
+                    
                     GoogleSignInButton(viewModel: googleVM) {
                         Task{
                             await signInWithGoogle()
                             dismiss()
                         }
                     }
-                    .frame(width: 260, height: 45)
-                    .cornerRadius(1)
+                    .frame(width: 280, height: 45)
+                   
+                    
+                    // MARK: - Apple Button
+                    
+                    SignInWithAppleButton { request  in
+                        
+                    } onCompletion: { result   in
+                        
+                    }
+                    .frame(width: 280, height: 45)
+                    .cornerRadius(10)
+                    .padding(8)
                     
                     
+                    
+                    // MARK: - Email Button
+                    Button {
+                    
+                        
+                    } label: {
+                        HStack(spacing: 4) {
+                            Text("Continue with Email")
+                                .font(.body.bold())
+                            
+                            
+                        }
+                        .foregroundStyle(Color.white)
+                        .frame(width: 280, height: 45)
+                        .background(Color.appButton)
+                        .cornerRadius(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(
+                                    Color.white.opacity(0.25),
+                                    lineWidth: 1
+                                )
+                        )
+                    }
+
+                
                     // MARK: - Skip Button
 
                     /// Allows the user to continue as a guest by signing in anonymously via Firebase.
@@ -72,7 +112,7 @@ struct AuthView: View {
                         } label: {
                             Text("Skip")
                                 .font(.body.bold())
-                                .foregroundStyle(Color.primaryIcon)
+                                .foregroundStyle(Color.black.opacity(0.65))
                                 .frame(
                                     width: 280,
                                     height: 45,
@@ -82,8 +122,10 @@ struct AuthView: View {
                         }
 
                     }
+                    Spacer()
                 }
-            }
+            }.navigationTitle("Authentication")
+                .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
