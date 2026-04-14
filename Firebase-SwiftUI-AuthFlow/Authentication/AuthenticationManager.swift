@@ -8,6 +8,7 @@
 import FirebaseAuth
 import Foundation
 import GoogleSignIn
+import AuthenticationServices
 
 enum AuthState {
     case authenticated  /// Anonymously SignedIn
@@ -141,6 +142,41 @@ extension AuthenticationManager {
     }
 }
 
+extension AuthenticationManager {
+    
+    //MARK: Authenticate with Apple provider
+    
+    /// gets Apple provider user
+    ///
+    /// - parameter appleIDCredential: Apple provider user
+     
+    func appleAuth(_ appleIDCredential: ASAuthorizationAppleIDCredential, nonce: String?) async throws -> AuthDataResult?{
+        guard let nonce = nonce else {
+               fatalError("Invalid state: A login callback was received, but no login request was sent.")
+           }
+        guard let appleIDToken = appleIDCredential.identityToken else {
+                print("Unable to fetch identity token")
+                return nil
+            }
+        guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+                return nil
+            }
+        let credentials = OAuthProvider.appleCredential(withIDToken: idTokenString,
+                                                       rawNonce: nonce,
+                                                       fullName: appleIDCredential.fullName)
+        
+        
+        do { 
+            return try await authenticateUser(credential: credentials)
+           }
+           catch {
+               print("FirebaseAuthError: appleAuth(appleIDCredential:nonce:) failed. \(error)")
+               throw error
+           }
+    }
+   
+}
 extension AuthenticationManager {
 
     // MARK: - Credential Auth
