@@ -66,9 +66,9 @@ struct AuthView: View {
                     // MARK: - Apple Button
                     
                     SignInWithAppleButton { request  in
-                        
+                        AppleHelper.shared.requestAppleAuthorization(request)
                     } onCompletion: { result   in
-                        
+                        handleAppleID(result)
                     }
                     .frame(width: 280, height: 45)
                     .cornerRadius(10)
@@ -163,7 +163,37 @@ extension AuthView {
     }
 }
 
-
+extension AuthView {
+    
+    
+    func handleAppleID(_ result: Result<ASAuthorization, Error>) {
+        if case let .success(authenticate) = result {
+            guard let appleIDCredentials = authenticate.credential as? ASAuthorizationAppleIDCredential else {
+                print("AppleAuthorization failed: AppleID credential not available")
+                return
+            }
+            
+            Task {
+                do {
+                    let result = try await authManager.appleAuth(
+                        appleIDCredentials,
+                        nonce: AppleHelper.nonce
+                    )
+                    if result != nil {
+                        dismiss()
+                    }
+                } catch {
+                    print("AppleAuthorization failed: \(error)")
+                   // Add an error message with an alert
+                }
+            }
+        }
+        else if case let .failure(error) = result {
+            print("AppleAuthorization failed: \(error)")
+            // show message in alert
+        }
+    }
+}
 #Preview {
     AuthView()
         .environment(AuthenticationManager())
