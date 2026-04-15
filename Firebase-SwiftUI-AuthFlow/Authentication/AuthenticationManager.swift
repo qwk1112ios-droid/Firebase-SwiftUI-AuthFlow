@@ -16,12 +16,23 @@ enum AuthState {
     case signedOut      /// not signedIn or authenticated
 }
 
+enum AuthErrors: Error {
+    case ReauthenticateApple
+    case ReauthenticateGoogle
+    case RevokeAppleID
+    case RevokeGoogle
+}
+
 @MainActor
 @Observable class AuthenticationManager {
     var authState: AuthState = .signedOut
     var user: User?
     var handleListener: AuthStateDidChangeListenerHandle!
-
+    private let authLinkErrors: [AuthErrorCode] = [
+        .emailAlreadyInUse,
+        .credentialAlreadyInUse,
+        .providerAlreadyLinked,
+    ]
     init() {
         ConfigurationAuthStateChange()
     }
@@ -202,6 +213,23 @@ extension AuthenticationManager {
             return result
         } catch {
             print("FirebaseAuthError: signIn(with:) failed. \(error)")
+            if let error = error as NSError? {
+                if let code = AuthErrorCode(rawValue: error.code),
+                    authLinkErrors.contains(code)
+                {
+
+                    // If provider is "apple.com", get updated AppleID credentials from the error object.
+                    let appleCredentials =
+                    credentials.provider == "apple.com"
+                        ? error.userInfo[AuthErrorUserInfoUpdatedCredentialKey]
+                            as? AuthCredential
+                        : nil
+
+                    return try await self.authSignIn(with
+                                                      : appleCredentials ?? credentials
+                    )
+                }
+            }
             throw error
         }
     }
