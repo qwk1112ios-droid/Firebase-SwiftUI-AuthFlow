@@ -9,7 +9,7 @@ import AuthenticationServices
 import CryptoKit
 import Foundation
 
-class AppleHelper {
+class AppleHelper : NSObject {
     static let shared = AppleHelper()
     fileprivate static var currentNonce: String?
 
@@ -17,15 +17,35 @@ class AppleHelper {
         currentNonce ?? nil
 
     }
-    private init() {
+    private var continuation : CheckedContinuation<ASAuthorizationAppleIDCredential, Error>?
+     override init() {
     }
 
     func requestAppleAuthorization(_ request: ASAuthorizationAppleIDRequest) {
         AppleHelper.currentNonce = generateRandomNonce()
         request.requestedScopes = [.fullName, .email]
         request.nonce = sha256(AppleHelper.currentNonce!)
+        
+        
     }
-
+    
+    func requestAppleAuthorization() async throws -> ASAuthorizationAppleIDCredential {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.continuation = continuation
+            
+            // 1. create request
+            let appleIdProvider = ASAuthorizationAppleIDProvider()
+            let request = appleIdProvider.createRequest()
+            // 2. configure request
+                requestAppleAuthorization(request)
+            // 3. Controller handles request
+            let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+            // 4. AppleHelper becomes delegate to handle result
+                        authorizationController.delegate = self
+            // 5. perform reques
+                        authorizationController.performRequests()
+        }
+    }
 }
 
 extension AppleHelper {
@@ -64,5 +84,17 @@ extension AppleHelper {
         }.joined()
 
         return hashString
+    }
+}
+
+extension AppleHelper: ASAuthorizationControllerDelegate {
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if case let appleIDCredential as ASAuthorizationAppleIDCredential = authorization.credential {
+            continuation?.resume(returning: appleIDCredential)
+        }
+    }
+
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        continuation?.resume(throwing: error)
     }
 }
