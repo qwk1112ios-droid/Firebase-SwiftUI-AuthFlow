@@ -9,18 +9,15 @@ import FirebaseAuth
 import Foundation
 import GoogleSignIn
 import AuthenticationServices
+import FirebaseFirestore
 
 enum AuthState {
     case authenticated  /// Anonymously SignedIn
     case signedIn       /// email&password or with provider
     case signedOut      /// not signedIn or authenticated
 }
-
-enum AuthErrors: Error {
-    case ReauthenticateApple
-    case ReauthenticateGoogle
-    case RevokeAppleID
-    case RevokeGoogle
+enum FirestoreError: Error {
+    case documentDoesNotExist
 }
 
 @MainActor
@@ -28,6 +25,7 @@ enum AuthErrors: Error {
     var authState: AuthState = .signedOut
     var user: User?
     var handleListener: AuthStateDidChangeListenerHandle!
+    let db = Firestore.firestore()
     private let authLinkErrors: [AuthErrorCode] = [
         .emailAlreadyInUse,
         .credentialAlreadyInUse,
@@ -49,6 +47,23 @@ extension AuthenticationManager {
                 "user \(user, default: "user is nil") status have been updated."
             )
             self.updateState(for: user)
+            
+            Task {
+                if let user {
+
+                    do {
+                        try await self.getUserDocument(user)
+                    } catch FirestoreError.documentDoesNotExist {
+                        print("User Document Does Not Exist!")
+                       _ = await self.verifyAuthTokenResult()
+                        return
+                    }
+                    catch{
+                        print("Firestore error: \(error)") }
+
+                }
+            }
+            
         }
     }
     /// Updates the authentication state based on the current Firebase user.

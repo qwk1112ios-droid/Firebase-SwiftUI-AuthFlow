@@ -17,15 +17,27 @@ class GoogleHelper {
     @MainActor
     func signInWithGoogle() async throws -> GIDGoogleUser?  {
         if GIDSignIn.sharedInstance.hasPreviousSignIn() {
-          return try await  GIDSignIn.sharedInstance.restorePreviousSignIn ()
+            do {
+                try await GIDSignIn.sharedInstance.restorePreviousSignIn()
+                // 1.
+                return try await GIDSignIn.sharedInstance.currentUser?.refreshTokensIfNeeded()
+            }
+            catch {
+                // 2.
+                return try await googleSignInFlow()
+            }
+        } else {
+            return try await googleSignInFlow()
         }
-        else {
-            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return nil }
-            guard let rootViewController = windowScene.windows.first?.rootViewController else { return nil }
-
-            // 3.
-            let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
-            return result.user
-        }
+    }
+    
+    @MainActor
+    private func googleSignInFlow() async throws -> GIDGoogleUser? {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return nil }
+        guard let rootViewController = windowScene.windows.first?.rootViewController else { return nil }
+        
+        let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
+        return result.user
+        
     }
 }
