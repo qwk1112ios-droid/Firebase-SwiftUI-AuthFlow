@@ -61,45 +61,6 @@ struct AuthView: View {
                         }
                     }
                     .frame(width: 280, height: 45)
-                   
-                    
-                    // MARK: - Apple Button
-                    
-                    SignInWithAppleButton { request  in
-                        
-                    } onCompletion: { result   in
-                        
-                    }
-                    .frame(width: 280, height: 45)
-                    .cornerRadius(10)
-                    .padding(8)
-                    
-                    
-                    
-                    // MARK: - Email Button
-                    Button {
-                    
-                        
-                    } label: {
-                        HStack(spacing: 4) {
-                            Text("Continue with Email")
-                                .font(.body.bold())
-                            
-                            
-                        }
-                        .foregroundStyle(Color.white)
-                        .frame(width: 280, height: 45)
-                        .background(Color.appButton)
-                        .cornerRadius(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(
-                                    Color.white.opacity(0.25),
-                                    lineWidth: 1
-                                )
-                        )
-                    }
-
                 
                     // MARK: - Skip Button
 

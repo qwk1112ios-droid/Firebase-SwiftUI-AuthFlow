@@ -8,6 +8,11 @@
 import FirebaseAuth
 import Foundation
 import GoogleSignIn
+import FirebaseFirestore
+
+enum FirestoreError: Error {
+    case documentDoesNotExist
+}
 
 enum AuthState {
     case authenticated  /// Anonymously SignedIn
@@ -20,6 +25,12 @@ enum AuthState {
     var authState: AuthState = .signedOut
     var user: User?
     var handleListener: AuthStateDidChangeListenerHandle!
+     let db = Firestore.firestore()
+     let authLinkErrors: [AuthErrorCode] = [
+            .emailAlreadyInUse,
+            .credentialAlreadyInUse,
+            .providerAlreadyLinked,
+        ]
 
     init() {
         ConfigurationAuthStateChange()
@@ -36,6 +47,22 @@ extension AuthenticationManager {
             print(
                 "user \(user, default: "user is nil") status have been updated."
             )
+            Task {
+                          if let user {
+
+                              do {
+                             _ =  try await self.getUserDocument(user)
+                                  
+                              } catch FirestoreError.documentDoesNotExist {
+                                  print("User Document Does Not Exist!")
+                                 _ = await self.verifyAuthTokenResult()
+                                  return
+                              }
+                              catch{
+                                  print("Firestore error: \(error)") }
+
+                          }
+                      }
             self.updateState(for: user)
         }
     }
@@ -73,7 +100,19 @@ extension AuthenticationManager {
 
         }
     }
-}
+    
+    func getUserDocument(_ user: User) async throws -> Bool {
+           let userDocumentReference = db.collection("users").document(user.uid)
+           let document = try await userDocumentReference.getDocument()
+
+           guard document.exists else {
+               throw FirestoreError.documentDoesNotExist
+           }
+
+           return true
+       }
+   }
+
 
 
 
@@ -161,12 +200,18 @@ extension AuthenticationManager {
         do {
             guard let user = Auth.auth().currentUser else { return nil }
             let result = try await user.link(with: credentials)
-             await updateDisplayName(for: result.user)
+            await updateDisplayName(for: result.user)
             updateState(for: result.user)
             return result
         } catch {
             print("FirebaseAuthError: signIn(with:) failed. \(error)")
-            throw error
+            if let error = error as NSError? {
+                if let code = AuthErrorCode(rawValue: error.code),
+                   authLinkErrors.contains(code) {
+                    return try await self.authSignIn(with: credentials)
+                }
+                throw error
+            }
         }
     }
     /// else just signe In provider User to firebase
