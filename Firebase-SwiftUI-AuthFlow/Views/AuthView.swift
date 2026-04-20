@@ -23,70 +23,69 @@ struct AuthView: View {
         NavigationStack {
             ZStack {
                 FluidModernBackground()
-                VStack {
-                   
-                    Image("lock1")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 280, height: 260)
-                        .foregroundStyle(
-                            Color.black.opacity(0.65)
-                        )
-                        .padding()
-                        .background(
-                                RoundedRectangle(cornerRadius: 35, style: .continuous)
-                                    .fill(.ultraThinMaterial)
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 35, style: .continuous)
-                                    .stroke(.white.opacity(0.5), lineWidth: 1)
-                            )
-                            .shadow(color: .black.opacity(0.15), radius: 20, x: 0, y: 10)
-                            .padding()
-                    Spacer()
-                    
-                    Rectangle()
-                        .frame(width : 300, height: 3
-                        
-                        )
-                        .foregroundColor(Color.black.opacity(0.3))
-                    
-                    // MARK: - Google Button
-                    Spacer()
-                    
-                    GoogleSignInButton(viewModel: googleVM) {
-                        Task{
-                            await signInWithGoogle()
-                            dismiss()
+                    .ignoresSafeArea()
+
+                VStack(spacing: 24) {
+                    Spacer(minLength: 20)
+
+                    VStack(spacing: 18) {
+                        Image("cb1")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 180, height: 180)
+                            .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                            .shadow(color: .black.opacity(0.12), radius: 18, x: 0, y: 8)
+
+                        VStack(spacing: 8) {
+                            Text("Coffee & Books")
+                                .font(.system(size: 30, weight: .bold, design: .rounded))
+                                .foregroundStyle(.primary)
+
+                            Text("Your cozy corner for coffee, books, and quiet moments.")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 16)
                         }
                     }
-                    .frame(width: 280, height: 45)
-                
-                    // MARK: - Skip Button
+                    .padding(.horizontal, 24)
+                    .padding(.top, 12)
 
-                    /// Allows the user to continue as a guest by signing in anonymously via Firebase.
-                    if authManager.authState == .signedOut {
-                        Button {
+                    VStack(spacing: 14) {
+                        GoogleSignInButton(viewModel: googleVM) {
                             Task {
-                                await handleSignInAnonymously()
+                                await signInWithGoogle()
+                                dismiss()
                             }
-                        } label: {
-                            Text("Skip")
-                                .font(.body.bold())
-                                .foregroundStyle(Color.black.opacity(0.65))
-                                .frame(
-                                    width: 280,
-                                    height: 45,
-                                    alignment: .center
-                                )
-
                         }
+                        .frame(width: 280, height: 50)
+                        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
 
+                        if authManager.authState == .signedOut {
+                            Button {
+                                Task {
+                                    await handleSignInAnonymously()
+                                }
+                            } label: {
+                                Text("Continue as Guest")
+                                    .foregroundStyle(.primary)
+                                    .frame(maxWidth: .infinity)
+                                    .frame(width: 280, height: 50)
+                                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                                    .overlay {
+                                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                            .stroke(.white.opacity(0.45), lineWidth: 1)
+                                    }
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
+                    .padding(.horizontal, 24)
+
                     Spacer()
                 }
-            }.navigationTitle("Authentication")
-                .navigationBarTitleDisplayMode(.inline)
+            }
+            .toolbar(.hidden, for: .navigationBar)
         }
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		717865D02F95D25600A5D3FB /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 717865CF2F95D25600A5D3FB /* FirebaseFirestoreCombine-Community */; };
 		717DB54A2F7A21500006F1A8 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 717DB5492F7A21500006F1A8 /* FirebaseAuth */; };
 		717DB54C2F7A21500006F1A8 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 717DB54B2F7A21500006F1A8 /* FirebaseCore */; };
 		717DB54E2F7A21500006F1A8 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 717DB54D2F7A21500006F1A8 /* FirebaseFirestore */; };
@@ -76,6 +77,7 @@
 				717DB5522F7A21500006F1A8 /* GoogleSignInSwift in Frameworks */,
 				717DB54C2F7A21500006F1A8 /* FirebaseCore in Frameworks */,
 				717DB5502F7A21500006F1A8 /* GoogleSignIn in Frameworks */,
+				717865D02F95D25600A5D3FB /* FirebaseFirestoreCombine-Community in Frameworks */,
 				717DB54A2F7A21500006F1A8 /* FirebaseAuth in Frameworks */,
 				717DB54E2F7A21500006F1A8 /* FirebaseFirestore in Frameworks */,
 			);
@@ -151,6 +153,7 @@
 				717DB54D2F7A21500006F1A8 /* FirebaseFirestore */,
 				717DB54F2F7A21500006F1A8 /* GoogleSignIn */,
 				717DB5512F7A21500006F1A8 /* GoogleSignInSwift */,
+				717865CF2F95D25600A5D3FB /* FirebaseFirestoreCombine-Community */,
 			);
 			productName = "Firebase-SwiftUI-AuthFlow";
 			productReference = 717DB5172F7A154B0006F1A8 /* Firebase-SwiftUI-AuthFlow.app */;
@@ -644,6 +647,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		717865CF2F95D25600A5D3FB /* FirebaseFirestoreCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 717DB5412F7A1ACA0006F1A8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseFirestoreCombine-Community";
+		};
 		717DB5492F7A21500006F1A8 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 717DB5412F7A1ACA0006F1A8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

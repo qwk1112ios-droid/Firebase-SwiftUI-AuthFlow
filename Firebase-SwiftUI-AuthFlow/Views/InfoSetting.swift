@@ -15,173 +15,150 @@ struct InfoSetting: View {
     
     var body: some View {
         NavigationStack {
-            ZStack{
+            ZStack {
                 FluidModernBackground()
-                VStack{
-                    Image("security")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 280, height: 260)
-                        .foregroundStyle(
-                            Color.black.opacity(0.65)
-                        )
-                        .padding()
-                        .background(
-                                RoundedRectangle(cornerRadius: 28, style: .continuous)
-                                    .fill(.ultraThinMaterial)
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 28, style: .continuous)
-                                    .stroke(.white.opacity(0.5), lineWidth: 1)
-                            )
-                            .shadow(color: .black.opacity(0.15), radius: 20, x: 0, y: 10)
-                    if authManager.authState == .authenticated {
-                       // Link user signIn
-                        Text(
-                            "user: \(authManager.user?.uid ?? "Anonymous User")"
-                        )
-                        .font(.headline)
-                        .padding()
-                        
-                        
-                        Button {
-                           showAuthView = true
-                            
-                        } label: {
-                            HStack(spacing: 4) {
-                                Text("SignIn")
-                                    .font(.body.bold())
-                                
-                                
+                    .ignoresSafeArea()
+
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 24) {
+                        Spacer(minLength: 12)
+
+                        Image("cb1")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 190, height: 190)
+                            .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                            .shadow(color: .black.opacity(0.12), radius: 18, x: 0, y: 8)
+                            .padding(.top, 16)
+
+                        if authManager.authState == .authenticated {
+                            VStack(spacing: 10) {
+                                Text("Become a Coffee & Books member")
+                                    .font(.title3.weight(.semibold))
+                                    .multilineTextAlignment(.center)
+
+                                Text("Sign in to save your account and unlock the full experience.")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                    .multilineTextAlignment(.center)
                             }
-                            .foregroundStyle(Color.white)
-                            .frame(width: 260, height: 45)
-                            .background(Color.appButton)
-                            .cornerRadius(10)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(
-                                        Color.white.opacity(0.25),
-                                        lineWidth: 1
-                                    )
-                            )
-                        }
-                        
-                        Button {
-                          handleSignOut()
-                            
-                        } label: {
-                            HStack(spacing: 4) {
-                                Text("SignOut")
-                                    .font(.body.bold())
-                                
-                                
+                            .padding(.horizontal, 24)
+
+                            Button {
+                                showAuthView = true
+                            } label: {
+                                Text("Sign In")
+                                    .font(.headline)
+                                    .foregroundStyle(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 52)
+                                    .background(Color.appButton, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                    .overlay {
+                                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                            .stroke(Color.white.opacity(0.25), lineWidth: 1)
+                                    }
                             }
-                            .foregroundStyle(Color.white)
-                            .frame(width: 260, height: 45)
-                            .background(Color.appButton)
-                            .cornerRadius(10)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(
-                                        Color.white.opacity(0.25),
-                                        lineWidth: 1
-                                    )
-                            )
+                            .buttonStyle(.plain)
+                            .padding(.horizontal, 24)
                         }
 
-                    }
-                    
-                    if authManager.authState == .signedIn {
-                     
-                        VStack{
-                            
-                            Text(authManager.user?.displayName ?? "Name placeholder")
-                                .font(.headline)
-                            Text(authManager.user?.email ?? "Email placeholder")
-                                .font(.subheadline)
-                            //
-                            
-                            Button {
-                                handleSignOut()
-                               
-                            } label: {
-                                HStack(spacing: 4) {
-                                    Text("SignOut")
-                                        .font(.body.bold())
+                        if authManager.authState == .signedIn {
+                            VStack(spacing: 20) {
+                                VStack(spacing: 6) {
+                                    Text(authManager.user?.displayName ?? "Coffee & Books Member")
+                                        .font(.title3.weight(.semibold))
+                                        .multilineTextAlignment(.center)
+
+                                    Text(authManager.user?.email ?? "Email not available")
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                        .multilineTextAlignment(.center)
+                                }
+
+                                VStack(spacing: 12) {
+                                    Button {
+                                        handleSignOut()
+                                    } label: {
+                                        Text("Sign Out")
+                                            .font(.headline)
+                                            .foregroundStyle(.white)
+                                            .frame(maxWidth: .infinity)
+                                            .frame(height: 52)
+                                            .background(Color.appButton, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                            .overlay {
+                                                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                                    .stroke(Color.white.opacity(0.25), lineWidth: 1)
+                                            }
                                     }
-                                .foregroundStyle(Color.white)
-                                .frame(width: 260, height: 45)
-                                .background(Color.appButton)
-                                .cornerRadius(10)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(
-                                            Color.white.opacity(0.25),
-                                            lineWidth: 1
-                                        )
-                                )
+                                    .buttonStyle(.plain)
+
+                                    Button {
+                                        showDeleteAccountAlert = true
+                                    } label: {
+                                        Text("Delete Account")
+                                            .font(.headline)
+                                            .foregroundStyle(.red)
+                                            .frame(maxWidth: .infinity)
+                                            .frame(height: 52)
+                                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                            .overlay {
+                                                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                                    .stroke(Color.red.opacity(0.25), lineWidth: 1)
+                                            }
+                                    }
+                                    .buttonStyle(.plain)
+                                }
                             }
-                            
-                            // add delete button
-                            Button{
-                                                           showDeleteAccountAlert = true
-                                                            
-                                                        } label: {
-                                                            Text("Delete Account")
-                                                                .foregroundStyle(Color.red)
-                                                                .frame(width: 260, height: 45)
-                                                                .background(Color.appButton)
-                                                                .cornerRadius(10)
-                                                                .overlay(
-                                                                    RoundedRectangle(cornerRadius: 12)
-                                                                        .stroke(
-                                                                            Color.white.opacity(0.25),
-                                                                            lineWidth: 1
-                                                                        )
-                                                                )
-                                                        }
+                            .padding(24)
+                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 28, style: .continuous)
+                                    .stroke(.white.opacity(0.35), lineWidth: 1)
+                            }
+                            .padding(.horizontal, 24)
+                        }
+
+                        Spacer(minLength: 40)
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+            }
+            .toolbar(.hidden, for: .navigationBar)
+            .confirmationDialog("Delete Account", isPresented: $showDeleteAccountAlert) {
+                Button("Yes, Delete Account", role: .destructive) {
+                    Task {
+                        do {
+                            try await authManager.deleteAccount()
+                        } catch AuthErrors.ReauthenticateGoogle {
+                            // Google re-authentication failed
+                        } catch AuthErrors.RevokeGoogle {
+                            // Google token revocation failed
+                        } catch {
+                            // Show generic error message
                         }
                     }
-                }  .confirmationDialog("Delete Account ", isPresented: $showDeleteAccountAlert) {
-                    Button("Yes, Delete account", role: .destructive){
-                        Task{
-                            do {
-                                try await authManager.deleteAccount()
-                               
-                            }
-                           catch AuthErrors.ReauthenticateGoogle {
-                                                // Google re-authentication failed
-                                            }
-                                            catch AuthErrors.RevokeGoogle {
-                                                // Google token revocation failed
-                                            }
-                                            catch {
-                                                // Show generic error message
-                                            }
-                        }
-                    }
-                    
-                }message: {
-                    Text("Deleting account is permanent. Are you sure you want to delete your account?") }
-            }.sheet(isPresented: $showAuthView) {
+                }
+            } message: {
+                Text("Deleting your account is permanent. Are you sure you want to continue?")
+            }
+            .sheet(isPresented: $showAuthView) {
                 AuthView()
             }
         }
     }
-    
-    //MARK: -SignOut
-    func handleSignOut() {
-        do {
-            try authManager.signOut()
-
-        } catch {
-            print("error")
+        
+        //MARK: -SignOut
+        func handleSignOut() {
+            do {
+                try authManager.signOut()
+                
+            } catch {
+                print("error")
+            }
         }
     }
-}
-
-
+    
+    
 
 #Preview {
     InfoSetting()
