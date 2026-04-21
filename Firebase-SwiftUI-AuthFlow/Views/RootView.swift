@@ -14,7 +14,7 @@ struct RootView: View {
            AuthView()
         }
         else {
-            InfoSetting()
+            ProductView()
         }
     }
 }

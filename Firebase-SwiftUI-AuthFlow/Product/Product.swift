@@ -13,4 +13,5 @@ struct Product: Identifiable, Codable {
     let title: String
     let description : String
     let price : Double
+    let imageUrl: String
 }
