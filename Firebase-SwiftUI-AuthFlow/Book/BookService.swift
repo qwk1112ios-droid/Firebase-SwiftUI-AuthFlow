@@ -8,30 +8,29 @@
 import Foundation
 import FirebaseFirestore
 
-public protocol BookServiceProtocol {
-   func fetchBooks() async throws -> Void
+ protocol BookServiceProtocol {
+   func fetchBooks() async throws -> [Book]
 }
 
 class BookService: BookServiceProtocol {
-    
-    public init() {}
     let db = Firestore.firestore()
     
-    public func fetchBooks() async throws {
-        
-    }
-   
+    public init() {}
+    
     func fetchBooks() async throws -> [Book] {
-       
-        let snapshot = try await db.collection("products").getDocuments()
-
-               return snapshot.documents.compactMap { document in
-
-                   try? document.data(as: Book.self)
-
-               }
+        let snapshot = try await db.collection("Books").getDocuments()
         
-        
+        return snapshot.documents.compactMap { document in
+            
+            try? document.data(as: Book.self)
+            
+        }
     }
+    
+    
 }
+    
+   
+   
+    
 

@@ -8,8 +8,56 @@
 import SwiftUI
 
 struct BookView: View {
+    @State var vm = BookViewModel(bookService: BookService())
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            FluidModernBackground()
+                .ignoresSafeArea()
+
+            NavigationStack {
+                Group {
+                    if vm.isLoading {
+                        ProgressView("Loading books...")
+                    } else if let errorMessage = vm.errorMessage {
+                        VStack(spacing: 12) {
+                            Image(systemName: "wifi.exclamationmark")
+                                .font(.largeTitle)
+
+                            Text("Something went wrong")
+                                .font(.headline)
+
+                            Text(errorMessage)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                    } else if vm.isEmpty {
+                        VStack(spacing: 12) {
+                            Image(systemName: "books.vertical")
+                                .font(.largeTitle)
+
+                            Text("No books yet")
+                                .font(.headline)
+
+                            Text("Please check back later.")
+                                .foregroundStyle(.secondary)
+                        }
+                    } else {
+                        List(vm.books) { book in
+                            BookRowView(book: book)
+                        }
+                        .listStyle(.plain)
+                        .scrollContentBackground(.hidden)
+                    }
+                }
+                .navigationTitle("Our Book Selection")
+                .navigationBarTitleDisplayMode(.inline)
+                .task {
+                    await vm.fetchBooks()
+                }
+            }
+            .background(Color.clear)
+        }
     }
 }
 
