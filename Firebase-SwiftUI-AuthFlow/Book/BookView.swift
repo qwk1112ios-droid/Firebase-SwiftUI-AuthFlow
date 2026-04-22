@@ -43,11 +43,21 @@ struct BookView: View {
                                 .foregroundStyle(.secondary)
                         }
                     } else {
-                        List(vm.books) { book in
-                            BookRowView(book: book)
+                        ScrollView{
+                            LazyVStack(spacing: 16) {
+                                ForEach(vm.books) { book in
+                                    BookRowView(book: book)
+                                        .padding(12)
+                                        .background(.white.opacity(0.55))
+                                        .clipShape(
+                                            RoundedRectangle(cornerRadius: 20)
+                                        )
+                                }
+                            }
+                            .padding(.horizontal)
+                            .padding(.top, 8)
+                            .padding(.bottom, 24)
                         }
-                        .listStyle(.plain)
-                        .scrollContentBackground(.hidden)
                     }
                 }
                 .navigationTitle("Our Book Selection")
