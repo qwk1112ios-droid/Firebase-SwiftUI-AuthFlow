@@ -11,10 +11,6 @@ struct ProductView: View {
     @State var vm = ProductViewModel(service: ProductService())
 
     var body: some View {
-        ZStack {
-            FluidModernBackground()
-                .ignoresSafeArea()
-
             TabView {
                 NavigationStack {
                     ZStack {
@@ -77,7 +73,7 @@ struct ProductView: View {
                 .toolbarBackground(.hidden, for: .navigationBar)
                 .toolbarBackground(.hidden, for: .tabBar)
                 .tabItem {
-                    Label("Coffee", systemImage: "cup.and.saucer.fill")
+                    Label("Menu", systemImage: "cup.and.saucer.fill")
                 }
                 NavigationStack {
                     ZStack {
@@ -91,7 +87,7 @@ struct ProductView: View {
                 .toolbarBackground(.hidden, for: .navigationBar)
                 .toolbarBackground(.hidden, for: .tabBar)
                 .tabItem {
-                    Label("Books", systemImage: "book.fill")
+                    Label("Shop", systemImage: "book.fill")
                 }
 
                 NavigationStack {
@@ -114,7 +110,7 @@ struct ProductView: View {
             .background(Color.clear)
         }
     }
-}
+
 
 #Preview {
     ProductView()

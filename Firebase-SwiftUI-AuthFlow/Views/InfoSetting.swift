@@ -60,54 +60,7 @@ struct InfoSetting: View {
                             } onDeleteAccount: {
                                 showDeleteAccountAlert = true
                             }
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text("Preferences")
-                                    .font(.headline)
-                                    .padding(.horizontal, 20)
-
-                                VStack(spacing: 0) {
-                                    Button {
-                                        
-                                    } label: {
-                                        SettingsRow(
-                                            icon: "cup.and.saucer.fill",
-                                            title: "Coffee Preferences"
-                                        )
-                                    }
-
-                                    Divider()
-
-                                    Button {
-                                        
-                                    } label: {
-                                        SettingsRow(
-                                            icon: "books.vertical.fill",
-                                            title: "Reading Preferences"
-                                        )
-                                    }
-
-                                    Divider()
-
-                                    Button {
-                                        
-                                    } label: {
-                                        SettingsRow(
-                                            icon: "bell.badge.fill",
-                                            title: "Notifications"
-                                        )
-                                    }
-                                }
-                                .padding(20)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 24, style: .continuous)
-                                        .fill(.ultraThinMaterial)
-                                )
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 24, style: .continuous)
-                                        .stroke(.white.opacity(0.3), lineWidth: 1)
-                                )
-                                .padding(.horizontal, 20)
-                            }
+                        
                         }
                     }
                      .confirmationDialog("Delete Account ", isPresented: $showDeleteAccountAlert) {
@@ -154,31 +107,8 @@ struct InfoSetting: View {
     
     
 
-}
 
-struct SettingsRow: View {
-    let icon: String
-    let title: String
 
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: icon)
-                .frame(width: 28, height: 28)
-                .foregroundStyle(.primary)
-
-            Text(title)
-                .foregroundStyle(.primary)
-
-            Spacer()
-
-            Image(systemName: "chevron.right")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-        }
-        .frame(height: 44)
-        .contentShape(Rectangle())
-    }
-}
 
 #Preview {
     InfoSetting()
